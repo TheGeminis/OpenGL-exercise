@@ -28,11 +28,9 @@ bool ModuleRender::Init()
 
 	//SDL_WINDOW_OPENGL(ModuleWindow);
 
-	//glewInit();
-	GLenum err = glewInit();
+	GLenum err = glewInit(); //glewInit();
 	// … check for errors
-	LOG("Using Glew %s", glewGetString(GLEW_VERSION));
-	// Should be 2.0
+	LOG("Using Glew %s", glewGetString(GLEW_VERSION)); // Should be 2.0
 
 	LOG("Vendor: %s", glGetString(GL_VENDOR));
 	LOG("Renderer: %s", glGetString(GL_RENDERER));
@@ -42,6 +40,10 @@ bool ModuleRender::Init()
 	glEnable(GL_DEPTH_TEST); // Enable depth test
 	glEnable(GL_CULL_FACE); // Enable cull backward faces
 	glFrontFace(GL_CCW); // Front faces will be counter clockwise
+
+	//Initialize render pipeline options
+	glCullFace(GL_BACK);
+	glCullFace(GL_CCW);
 
 	return true;
 }
