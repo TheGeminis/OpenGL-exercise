@@ -251,6 +251,8 @@
     <ClInclude Include="SDL\include\SDL_vulkan.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="default_fragment.glsl" />
+    <None Include="default_vertex.glsl" />
     <None Include="SDL\docs\doxyfile" />
     <None Include="SDL\docs\README-android.md" />
     <None Include="SDL\docs\README-cmake.md" />

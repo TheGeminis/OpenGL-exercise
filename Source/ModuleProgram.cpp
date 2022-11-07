@@ -60,12 +60,12 @@ unsigned CompileShader(unsigned type, const char* source)
 	if (res == GL_FALSE)
 	{
 		int len = 0;
-		glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
+		glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &len); //posava id
 		if (len > 0)
 		{
 			int written = 0;
 			char* info = (char*)malloc(len);
-			glGetShaderInfoLog(id, len, &written, info);
+			glGetShaderInfoLog(shader_id, len, &written, info); //posava id
 			LOG("Log Info: %s", info);
 			free(info);
 		}
@@ -89,7 +89,7 @@ unsigned CreateProgram(unsigned vtx_shader, unsigned frg_shader)
 		{
 			int written = 0;
 			char* info = (char*)malloc(len);
-			glGetProgramInfoLog(program, len, &written, info); //it was "program" instead of "program_id"
+			glGetProgramInfoLog(program_id, len, &written, info); //it was "program" instead of "program_id"
 			LOG("Program Log Info: %s", info);
 			free(info);
 		}
