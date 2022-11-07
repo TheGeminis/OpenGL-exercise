@@ -16,7 +16,7 @@ bool ModuleRenderExercise::Init()
 {
 	// loads a triangle into a VBO with vertices: (-1, -1, 0) (1, -1, 0) (0, 1, 0)
 	unsigned myTriangle = CreateTriangleVBO();
-	//RenderVBO(myTriangle);
+	RenderVBO(myTriangle);
 
 	// creates a program with Hello World vertex and fragment shaders
 	App->program->CreateProgram(
@@ -42,7 +42,7 @@ update_status ModuleRenderExercise::PostUpdate()
 }
 
 // This function must be called one time at creation of vertex buffer
-unsigned CreateTriangleVBO()
+unsigned ModuleRenderExercise::CreateTriangleVBO()
 {
 	float vtx_data[] = { -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f };
 	unsigned vbo;
@@ -54,13 +54,13 @@ unsigned CreateTriangleVBO()
 }
 
 // This function must be called one time at destruction of vertex buffer
-void DestroyVBO(unsigned vbo)
+void ModuleRenderExercise::DestroyVBO(unsigned vbo)
 {
 	glDeleteBuffers(1, &vbo);
 }
 
 // This function must be called each frame for drawing the triangle
-void RenderVBO(unsigned vbo)
+void ModuleRenderExercise::RenderVBO(unsigned vbo)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glEnableVertexAttribArray(0);

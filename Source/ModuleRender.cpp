@@ -28,6 +28,8 @@ bool ModuleRender::Init()
 
 	//SDL_WINDOW_OPENGL(ModuleWindow);
 
+	//SDL_GL_CreateContext(App->window->window); ESTEM AQUI AMB EL DAVID
+
 	GLenum err = glewInit(); //glewInit();
 	// … check for errors
 	LOG("Using Glew %s", glewGetString(GLEW_VERSION)); // Should be 2.0
