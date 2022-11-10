@@ -14,17 +14,16 @@ ModuleRenderExercise::~ModuleRenderExercise()
 
 bool ModuleRenderExercise::Init()
 {
-	// creates a program with Hello World vertex and fragment shaders
-	unsigned myProgram = App->program->CreateProgram(
-		App->program->CompileShader(GL_VERTEX_SHADER, App->program->LoadShaderSource("./../Source/default_vertex.hlsl")), 
-		App->program->CompileShader(GL_FRAGMENT_SHADER, App->program->LoadShaderSource("./../Source/default_fragment.hlsl")));
-
 	// loads a triangle into a VBO with vertices: (-1, -1, 0) (1, -1, 0) (0, 1, 0)
-	unsigned myTriangle = CreateTriangleVBO();
+	myTriangle = CreateTriangleVBO();
 
-	RenderVBO(myTriangle, myProgram);
-
-	DestroyVBO(myTriangle);
+	// creates a program with Hello World vertex and fragment shaders
+	myProgram = 
+		App->program->CreateProgram
+		(
+			App->program->CompileShader(GL_VERTEX_SHADER, App->program->LoadShaderSource("../default_vertex.glsl")), 
+			App->program->CompileShader(GL_FRAGMENT_SHADER, App->program->LoadShaderSource("../default_fragment.glsl"))
+		);
 
 	return true;
 }
@@ -36,6 +35,8 @@ update_status ModuleRenderExercise::PreUpdate()
 
 update_status ModuleRenderExercise::Update()
 {
+	RenderVBO(myTriangle, myProgram);
+	
 	return UPDATE_CONTINUE;
 }
 
@@ -47,7 +48,8 @@ update_status ModuleRenderExercise::PostUpdate()
 // This function must be called one time at creation of vertex buffer
 unsigned ModuleRenderExercise::CreateTriangleVBO()
 {
-	float vtx_data[] = { -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f };
+	float vtx_data[] = 
+		{ -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f };
 	unsigned vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo); // set vbo active
@@ -77,5 +79,7 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 
 bool ModuleRenderExercise::CleanUp()
 {
+	DestroyVBO(myTriangle);
+	//glDeletProgram(myProgram);
 	return true;
 }

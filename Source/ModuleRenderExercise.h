@@ -16,4 +16,8 @@ public:
 	void DestroyVBO(unsigned vbo);
 	void RenderVBO(unsigned vbo, unsigned program);
 	bool CleanUp();
+
+private:
+	unsigned myTriangle;
+	unsigned myProgram;
 };
