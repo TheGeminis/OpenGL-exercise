@@ -14,15 +14,18 @@ ModuleRenderExercise::~ModuleRenderExercise()
 
 bool ModuleRenderExercise::Init()
 {
-	// loads a triangle into a VBO with vertices: (-1, -1, 0) (1, -1, 0) (0, 1, 0)
-	unsigned myTriangle = CreateTriangleVBO();
-	RenderVBO(myTriangle);
-
 	// creates a program with Hello World vertex and fragment shaders
-	App->program->CreateProgram(
+	unsigned myProgram = App->program->CreateProgram(
 		App->program->CompileShader(GL_VERTEX_SHADER, App->program->LoadShaderSource("./../Source/default_vertex.hlsl")), 
 		App->program->CompileShader(GL_FRAGMENT_SHADER, App->program->LoadShaderSource("./../Source/default_fragment.hlsl")));
-	
+
+	// loads a triangle into a VBO with vertices: (-1, -1, 0) (1, -1, 0) (0, 1, 0)
+	unsigned myTriangle = CreateTriangleVBO();
+
+	RenderVBO(myTriangle, myProgram);
+
+	DestroyVBO(myTriangle);
+
 	return true;
 }
 
@@ -60,13 +63,14 @@ void ModuleRenderExercise::DestroyVBO(unsigned vbo)
 }
 
 // This function must be called each frame for drawing the triangle
-void ModuleRenderExercise::RenderVBO(unsigned vbo)
+void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 {
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glEnableVertexAttribArray(0);
 	// size = 3 float per vertex
 	// stride = 0 is equivalent to stride = sizeof(float)*3
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	glUseProgram(program);
 	// 1 triangle to draw = 3 vertices
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
