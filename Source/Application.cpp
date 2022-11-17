@@ -5,6 +5,7 @@
 #include "ModuleInput.h"
 #include "ModuleProgram.h"
 #include "ModuleRenderExercise.h"
+#include "ModuleTimer.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ Application::Application()
 	modules.push_back(renderer = new ModuleRender());
 	modules.push_back(program = new ModuleProgram());
 	modules.push_back(renderExercise = new ModuleRenderExercise());
+	modules.push_back(timer = new ModuleTimer());
 }
 
 Application::~Application()
@@ -48,7 +50,6 @@ update_status Application::Update()
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		ret = (*it)->PostUpdate();
-
 	return ret;
 }
 

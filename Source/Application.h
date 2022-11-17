@@ -28,6 +28,7 @@ public:
 	ModuleInput* input = nullptr;
 	ModuleProgram* program = nullptr;
 	ModuleRenderExercise* renderExercise = nullptr;
+	ModuleTimer* timer = nullptr;
 
 private:
 
