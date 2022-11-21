@@ -10,6 +10,8 @@ class ModuleTextures;
 class ModuleInput;
 class ModuleProgram;
 class ModuleRenderExercise;
+class ModuleEditor;
+class ModuleTimer;
 
 class Application
 {
@@ -28,6 +30,7 @@ public:
 	ModuleInput* input = nullptr;
 	ModuleProgram* program = nullptr;
 	ModuleRenderExercise* renderExercise = nullptr;
+	ModuleEditor* editor = nullptr;
 	ModuleTimer* timer = nullptr;
 
 private:
