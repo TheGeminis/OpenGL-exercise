@@ -43,8 +43,6 @@ update_status ModuleEditor::Update()
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 
-    ImGui::Text("Hello, world %d", 123);
-
     ImGui::Render();
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
