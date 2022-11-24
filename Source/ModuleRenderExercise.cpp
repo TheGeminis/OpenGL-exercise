@@ -64,6 +64,12 @@ void ModuleRenderExercise::DestroyVBO(unsigned vbo)
 	glDeleteBuffers(1, &vbo);
 }
 
+// This function must be called one time at destruction of program
+void ModuleRenderExercise::DestroyProgram(unsigned program)
+{
+	glDeleteProgram(program);
+}
+
 // This function must be called each frame for drawing the triangle
 void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 {
@@ -80,6 +86,6 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 bool ModuleRenderExercise::CleanUp()
 {
 	DestroyVBO(myTriangle);
-	//glDeletProgram(myProgram);
+	DestroyProgram(myProgram);
 	return true;
 }

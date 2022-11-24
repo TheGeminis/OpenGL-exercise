@@ -13,11 +13,12 @@ public:
 	update_status Update();
 	update_status PostUpdate();
 	unsigned CreateTriangleVBO();
-	void DestroyVBO(unsigned vbo);
 	void RenderVBO(unsigned vbo, unsigned program);
+	void DestroyVBO(unsigned vbo);
+	void DestroyProgram(unsigned program);
 	bool CleanUp();
 
 private:
-	unsigned myTriangle;
-	unsigned myProgram;
+	unsigned myTriangle = 0;
+	unsigned myProgram = 0;
 };

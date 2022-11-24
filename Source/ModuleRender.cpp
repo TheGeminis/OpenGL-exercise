@@ -95,8 +95,8 @@ update_status ModuleRender::PreUpdate()
 		
 		1.1- Use SDL_GetWindowSize
 	*/
-	//windowSize = SDL_GetWindowSize(ModuleWindow::window);
-	//glViewport(0, 0, windowWidth, windowHeight);
+	//windowSize = SDL_GetWindowSize(App->window->window);
+	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

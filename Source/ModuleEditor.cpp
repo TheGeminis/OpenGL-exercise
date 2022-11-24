@@ -23,7 +23,9 @@ bool ModuleEditor::Init()
     
     //set up some flags:
     ImGuiIO& io = ImGui::GetIO();
-    //io.ConfigFlags |= … - imgui.h
+    /*io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;*/
 
     ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer->getContext());
     ImGui_ImplOpenGL3_Init("330");
@@ -36,7 +38,21 @@ update_status ModuleEditor::Update()
 {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(App->window->window);
+    
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
+
+    ImGui::Text("Hello, world %d", 123);
+
+    ImGui::Render();
+    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    SDL_GL_SwapWindow(App->window->window);
+
+    //ImGui_ImplSDL2_ProcessEvent(&event);
 
     return UPDATE_CONTINUE;
 }
