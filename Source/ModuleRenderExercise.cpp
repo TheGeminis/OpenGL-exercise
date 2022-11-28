@@ -26,17 +26,6 @@ bool ModuleRenderExercise::Init()
 			App->program->CompileShader(GL_FRAGMENT_SHADER, App->program->LoadShaderSource("../default_fragment.glsl"))
 		);
 
-	Frustum frustum;
-	frustum.type = FrustumType::PerspectiveFrustum;
-	frustum.pos = float3::zero;
-	frustum.front = -float3::unitZ;
-	frustum.up = float3::unitY;
-	frustum.nearPlaneDistance = 0.1f;
-	frustum.farPlaneDistance = 100.0f;
-	frustum.verticalFov = math::pi / 4.0f;
-	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * 1); //aspect;
-	float4x4 proj = frustum.ProjectionMatrix();
-
 	return true;
 }
 
@@ -47,7 +36,7 @@ update_status ModuleRenderExercise::PreUpdate()
 
 update_status ModuleRenderExercise::Update()
 {
-	RenderVBO(myTriangle, myProgram);
+	RenderTriangle(myTriangle, myProgram);
 	
 	return UPDATE_CONTINUE;
 }
@@ -55,6 +44,36 @@ update_status ModuleRenderExercise::Update()
 update_status ModuleRenderExercise::PostUpdate()
 {
 	return UPDATE_CONTINUE;
+}
+
+float4x4 ModuleRenderExercise::getProjectionMatrix()
+{
+	Frustum frustum;
+	frustum.type = FrustumType::PerspectiveFrustum;
+	frustum.pos = float3::zero;
+	frustum.front = -float3::unitZ;
+	frustum.up = float3::unitY;
+	frustum.nearPlaneDistance = 0.1f;
+	frustum.farPlaneDistance = 100.0f;
+	frustum.verticalFov = math::pi / 4.0f;
+	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * 1); //aspect;
+	return frustum.ProjectionMatrix();
+}
+
+float4x4 ModuleRenderExercise::getModelMatrix()
+{
+	return float4x4::FromTRS(
+		float3(2.0f, 0.0f, 0.0f),
+		float4x4::RotateZ(pi / 4.0f),
+		float3(2.0f, 1.0f, 0.0f)
+	);
+
+}
+
+float4x4 ModuleRenderExercise::getViewMatrix()
+{
+	return float4x4::LookAt(float3(0.0f, 4.0f, 8.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3::unitY);
+
 }
 
 // This function must be called one time at creation of vertex buffer
@@ -99,11 +118,11 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-void ModuleRenderExercise::RenderTriangle()
+void ModuleRenderExercise::RenderTriangle(unsigned vbo, unsigned program)
 {
 	float4x4 model, view, proj;
 	// TODO: retrieve model view and projection
-	glUseProgram(myProgram);
+	glUseProgram(program);
 	glUniformMatrix4fv(0, 1, GL_TRUE, &model[0][0]);
 	glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0]);
 	glUniformMatrix4fv(2, 1, GL_TRUE, &proj[0][0]);
