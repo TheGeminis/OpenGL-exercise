@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleProgram.h"
 #include <GL\glew.h>
+#include "MathGeoLib.h"
 
 ModuleRenderExercise::ModuleRenderExercise()
 {
@@ -24,6 +25,17 @@ bool ModuleRenderExercise::Init()
 			App->program->CompileShader(GL_VERTEX_SHADER, App->program->LoadShaderSource("../default_vertex.glsl")), 
 			App->program->CompileShader(GL_FRAGMENT_SHADER, App->program->LoadShaderSource("../default_fragment.glsl"))
 		);
+
+	Frustum frustum;
+	frustum.type = FrustumType::PerspectiveFrustum;
+	frustum.pos = float3::zero;
+	frustum.front = -float3::unitZ;
+	frustum.up = float3::unitY;
+	frustum.nearPlaneDistance = 0.1f;
+	frustum.farPlaneDistance = 100.0f;
+	frustum.verticalFov = math::pi / 4.0f;
+	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * 1; //aspect;
+	float4x4 proj = frustum.ProjectionMatrix();
 
 	return true;
 }
@@ -49,7 +61,11 @@ update_status ModuleRenderExercise::PostUpdate()
 unsigned ModuleRenderExercise::CreateTriangleVBO()
 {
 	float vtx_data[] = 
-		{ -1.0f, -1.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, 1.0f, 0.0f };
+	{
+		-1.0f, -1.0f, 0.0f, 
+		1.0f, -1.0f, 0.0f,
+		0.0f, 1.0f, 0.0f
+	};
 	unsigned vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo); // set vbo active
@@ -81,6 +97,18 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 	glUseProgram(program);
 	// 1 triangle to draw = 3 vertices
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+void RenderTriangle()
+{
+	float4x4 model, view, proj;
+	// TODO: retrieve model view and projection
+	glUseProgram(program);
+	glUniformMatrix4fv(0, 1, GL_TRUE, &model[0][0])
+		glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0])
+		glUniformMatrix4fv(2, 1, GL_TRUE, &proj[0][0])
+		// TODO: bind buffer and vertex attributes
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 bool ModuleRenderExercise::CleanUp()
