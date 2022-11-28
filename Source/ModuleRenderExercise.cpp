@@ -34,7 +34,7 @@ bool ModuleRenderExercise::Init()
 	frustum.nearPlaneDistance = 0.1f;
 	frustum.farPlaneDistance = 100.0f;
 	frustum.verticalFov = math::pi / 4.0f;
-	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * 1; //aspect;
+	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * 1); //aspect;
 	float4x4 proj = frustum.ProjectionMatrix();
 
 	return true;
@@ -99,16 +99,16 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-void RenderTriangle()
+void ModuleRenderExercise::RenderTriangle()
 {
 	float4x4 model, view, proj;
 	// TODO: retrieve model view and projection
-	glUseProgram(program);
-	glUniformMatrix4fv(0, 1, GL_TRUE, &model[0][0])
-		glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0])
-		glUniformMatrix4fv(2, 1, GL_TRUE, &proj[0][0])
-		// TODO: bind buffer and vertex attributes
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+	glUseProgram(myProgram);
+	glUniformMatrix4fv(0, 1, GL_TRUE, &model[0][0]);
+	glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0]);
+	glUniformMatrix4fv(2, 1, GL_TRUE, &proj[0][0]);
+	// TODO: bind buffer and vertex attributes
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 bool ModuleRenderExercise::CleanUp()

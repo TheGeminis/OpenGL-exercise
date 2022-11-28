@@ -14,6 +14,7 @@ public:
 	update_status PostUpdate();
 	unsigned CreateTriangleVBO();
 	void RenderVBO(unsigned vbo, unsigned program);
+	void RenderTriangle();
 	void DestroyVBO(unsigned vbo);
 	void DestroyProgram(unsigned program);
 	bool CleanUp();
