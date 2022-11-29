@@ -56,23 +56,24 @@ float4x4 ModuleRenderExercise::getProjectionMatrix()
 	frustum.nearPlaneDistance = 0.1f;
 	frustum.farPlaneDistance = 100.0f;
 	frustum.verticalFov = math::pi / 4.0f;
-	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * 1); //aspect;
+	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * (16.0f/9.0f)); //aspect;
 	return frustum.ProjectionMatrix();
 }
 
 float4x4 ModuleRenderExercise::getModelMatrix()
 {
-	return float4x4::FromTRS(
+	return float4x4::identity;
+		/*float4x4::FromTRS(
 		float3(2.0f, 0.0f, 0.0f),
 		float4x4::RotateZ(pi / 4.0f),
 		float3(2.0f, 1.0f, 0.0f)
-	);
+	);*/
 
 }
 
 float4x4 ModuleRenderExercise::getViewMatrix()
 {
-	return float4x4::LookAt(float3(0.0f, 4.0f, 8.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3::unitY);
+	return float4x4::LookAt(float3::unitZ, float3(0.0f, 0.0f, 10.0f), float3::unitY, float3::unitY);
 
 }
 
@@ -81,9 +82,9 @@ unsigned ModuleRenderExercise::CreateTriangleVBO()
 {
 	float vtx_data[] = 
 	{
-		-1.0f, -1.0f, 0.0f, 
-		1.0f, -1.0f, 0.0f,
-		0.0f, 1.0f, 0.0f
+		-1.0f, -1.0f, 0.5f, 
+		1.0f, -1.0f, 0.5f,
+		0.0f, 1.0f, 0.5f
 	};
 	unsigned vbo;
 	glGenBuffers(1, &vbo);
