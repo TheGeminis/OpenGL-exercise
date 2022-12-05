@@ -16,9 +16,11 @@ ModuleRenderExercise::~ModuleRenderExercise()
 bool ModuleRenderExercise::Init()
 {
 	// loads a triangle into a VBO with vertices: (-1, -1, 0) (1, -1, 0) (0, 1, 0)
+	LOG("Loading Triangle into a VBO with vertices: (-1, -1, 0) (1, -1, 0) (0, 1, 0)");
 	myTriangle = CreateTriangleVBO();
 
 	// creates a program with Hello World vertex and fragment shaders
+	LOG("Creating a program with Hello World vertex and fragment shaders");
 	myProgram = 
 		App->program->CreateProgram
 		(
@@ -36,7 +38,8 @@ update_status ModuleRenderExercise::PreUpdate()
 
 update_status ModuleRenderExercise::Update()
 {
-	RenderTriangle(myTriangle, myProgram);
+	//RenderTriangle(myTriangle, myProgram);
+	//RenderVBO(myTriangle, myProgram);
 	
 	return UPDATE_CONTINUE;
 }
@@ -62,19 +65,19 @@ float4x4 ModuleRenderExercise::getProjectionMatrix()
 
 float4x4 ModuleRenderExercise::getModelMatrix()
 {
-	return float4x4::identity;
-		/*float4x4::FromTRS(
+	//return float4x4::identity;
+	return float4x4::FromTRS(
 		float3(2.0f, 0.0f, 0.0f),
 		float4x4::RotateZ(pi / 4.0f),
 		float3(2.0f, 1.0f, 0.0f)
-	);*/
-
+	);
+	//model.Transpose();
+	//return model;
 }
 
 float4x4 ModuleRenderExercise::getViewMatrix()
 {
-	return float4x4::LookAt(float3::unitZ, float3(0.0f, 0.0f, 10.0f), float3::unitY, float3::unitY);
-
+	return float4x4::LookAt(float3(0.0f, 4.0f, 8.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3(0.0f, 0.0f, 0.0f));
 }
 
 // This function must be called one time at creation of vertex buffer
@@ -89,21 +92,10 @@ unsigned ModuleRenderExercise::CreateTriangleVBO()
 	unsigned vbo;
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo); // set vbo active
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vtx_data), vtx_data, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vtx_data), vtx_data, GL_STATIC_DRAW); //******ALGO PETA AQUI!!!****** <--- ___No es un error greu___
+	//<Source:API> <Type:Other> <Severity:notification> <ID:131185> <Message:Buffer detailed info: Buffer object 1 (bound to GL_ARRAY_BUFFER_ARB, usage hint is GL_STATIC_DRAW) will use VIDEO memory as the source for buffer object operations.>
 
 	return vbo;
-}
-
-// This function must be called one time at destruction of vertex buffer
-void ModuleRenderExercise::DestroyVBO(unsigned vbo)
-{
-	glDeleteBuffers(1, &vbo);
-}
-
-// This function must be called one time at destruction of program
-void ModuleRenderExercise::DestroyProgram(unsigned program)
-{
-	glDeleteProgram(program);
 }
 
 // This function must be called each frame for drawing the triangle
@@ -121,12 +113,14 @@ void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 
 void ModuleRenderExercise::RenderTriangle(unsigned vbo, unsigned program)
 {
-	float4x4 model, view, proj;
+	float4x4 proj, view, model;
 
-	// TODO: retrieve model view and projection
-	model = getModelMatrix();
-	view = getViewMatrix();
+	// TODO: retrieve projection, view and model
 	proj = getProjectionMatrix();
+	view = getViewMatrix();
+	model = getModelMatrix();
+
+	model.Transpose();
 
 	glUseProgram(program);
 	glUniformMatrix4fv(0, 1, GL_TRUE, &proj[0][0]);
@@ -137,8 +131,19 @@ void ModuleRenderExercise::RenderTriangle(unsigned vbo, unsigned program)
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
 	glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+// This function must be called one time at destruction of vertex buffer
+void ModuleRenderExercise::DestroyVBO(unsigned vbo)
+{
+	glDeleteBuffers(1, &vbo);
+}
+
+// This function must be called one time at destruction of program
+void ModuleRenderExercise::DestroyProgram(unsigned program)
+{
+	glDeleteProgram(program);
 }
 
 bool ModuleRenderExercise::CleanUp()

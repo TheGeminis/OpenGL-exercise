@@ -50,18 +50,21 @@ ModuleRender::~ModuleRender()
 // Called before render is available
 bool ModuleRender::Init()
 {
-	LOG("Creating Renderer context");
-
+	LOG("Creating Renderer context Major Version 4, Minor Version 6");
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4); // desired version
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 6);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 
+	LOG("Creating GL Double Buffer");
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // we want a double buffer
+	LOG("Setting buffer depth to 24 bits");
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); // we want to have a depth buffer with 24 bits
+	LOG("Setting stencil buffer with 8 bits");
 	SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8); // we want to have a stencil buffer with 8 bits
 
 	context = SDL_GL_CreateContext(App->window->window);
 
+	LOG("Initialazing Glew");
 	GLenum err = glewInit(); //glewInit();
 	// … check for errors
 	LOG("Using Glew %s", glewGetString(GLEW_VERSION)); // Should be 2.0
@@ -77,13 +80,19 @@ bool ModuleRender::Init()
 	LOG("OpenGL version supported %s", glGetString(GL_VERSION));
 	LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
+	LOG("Enabling depth test");
 	glEnable(GL_DEPTH_TEST); // Enable depth test
+	LOG("Enabling cull backward faces");
 	glEnable(GL_CULL_FACE); // Enable cull backward faces
+	LOG("Enabling counter clockwise Front faces");
 	glFrontFace(GL_CCW); // Front faces will be counter clockwise
 
 	//Initialize render pipeline options
+	LOG("Specifying Culling to back-facing");
 	glCullFace(GL_BACK);
-	glCullFace(GL_CCW);
+	LOG("Specifying Culling to Counter Clockwise");
+	glCullFace(GL_CCW); //******ALGO PETA AQUI!!!******  :
+	//<Source:API> <Type:Error> <Severity:high> <ID:1280> <Message:GL_INVALID_ENUM error generated. <mode> is not a valid face culling mode.>
 
 	return true;
 }

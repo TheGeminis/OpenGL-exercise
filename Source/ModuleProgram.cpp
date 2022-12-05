@@ -13,6 +13,7 @@ ModuleProgram::~ModuleProgram()
 bool ModuleProgram::Init()
 {
 	// create a program form to files (vertex and fragment shader files)
+	LOG("Initialazing Module Program");
 
 	return true;
 }
@@ -36,6 +37,8 @@ char* ModuleProgram::LoadShaderSource(const char* shader_file_name)
 {
 	char* data = nullptr;
 	FILE* file = nullptr;
+
+	LOG("Loading shader from: %s", shader_file_name);
 	fopen_s(&file, shader_file_name, "rb");
 	if (file)
 	{
@@ -52,6 +55,7 @@ char* ModuleProgram::LoadShaderSource(const char* shader_file_name)
 
 unsigned ModuleProgram::CompileShader(unsigned type, const char* source)
 {
+	LOG("Compiling shader...");
 	unsigned shader_id = glCreateShader(type);
 	glShaderSource(shader_id, 1, &source, 0);
 	glCompileShader(shader_id);
@@ -60,12 +64,12 @@ unsigned ModuleProgram::CompileShader(unsigned type, const char* source)
 	if (res == GL_FALSE)
 	{
 		int len = 0;
-		glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &len); //posava id
+		glGetShaderiv(shader_id, GL_INFO_LOG_LENGTH, &len);
 		if (len > 0)
 		{
 			int written = 0;
 			char* info = (char*)malloc(len);
-			glGetShaderInfoLog(shader_id, len, &written, info); //posava id
+			glGetShaderInfoLog(shader_id, len, &written, info);
 			LOG("Log Info: %s", info);
 			free(info);
 		}
@@ -75,6 +79,7 @@ unsigned ModuleProgram::CompileShader(unsigned type, const char* source)
 
 unsigned ModuleProgram::CreateProgram(unsigned vtx_shader, unsigned frg_shader)
 {
+	LOG("Creating Program...");
 	unsigned program_id = glCreateProgram();
 	glAttachShader(program_id, vtx_shader);
 	glAttachShader(program_id, frg_shader);
@@ -89,7 +94,7 @@ unsigned ModuleProgram::CreateProgram(unsigned vtx_shader, unsigned frg_shader)
 		{
 			int written = 0;
 			char* info = (char*)malloc(len);
-			glGetProgramInfoLog(program_id, len, &written, info); //it was "program" instead of "program_id"
+			glGetProgramInfoLog(program_id, len, &written, info);
 			LOG("Program Log Info: %s", info);
 			free(info);
 		}

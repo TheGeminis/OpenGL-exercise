@@ -19,15 +19,19 @@ ModuleEditor::~ModuleEditor()
 // Called before render is available
 bool ModuleEditor::Init()
 {
+    IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    
     //set up some flags:
-    ImGuiIO& io = ImGui::GetIO();
-    /*io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;*/
+    LOG("Configuring ImGui io flags")
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;       // Enable Keyboard Controls
+    //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           // Enable Docking
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;         // Enable Multi-Viewport / Platform Windows
 
+    LOG("Initialazing ImplSDL2_InitForOpenGL with window and context");
     ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer->getContext());
+    LOG("Initialazing ImGui with version 330");
     ImGui_ImplOpenGL3_Init("330");
 
     return true;
@@ -36,18 +40,21 @@ bool ModuleEditor::Init()
 // Called every draw update
 update_status ModuleEditor::Update()
 {
-    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplOpenGL3_NewFrame(); //******ALGO PETA AQUI!!!****** : 
+    //<Source:API> <Type:Other> <Severity:low> <ID:131216> <Message:Program/shader state info: GLSL program 12 failed to link>
+    //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. <program> object is not successfully linked, or is not a program object.>
     ImGui_ImplSDL2_NewFrame(App->window->window);
-    
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
 
     ImGui::Render();
     glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
     glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData()); //******ALGO PETA AQUI!!!****** : 
+    //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. <program> has not been linked, or is not a program object.>
+    //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. <program> object is not successfully linked, or is not a program object.>
+    //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. No active program.>
+    //<Source:API> <Type:Error> <Severity:high> <ID:1281> <Message:GL_INVALID_VALUE error generated. <index> out of range.>
 
     //ImGui_ImplSDL2_ProcessEvent(&event);
 
