@@ -19,7 +19,6 @@ ModuleEditor::~ModuleEditor()
 // Called before render is available
 bool ModuleEditor::Init()
 {
-    IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     //set up some flags:
     LOG("Configuring ImGui io flags")
@@ -31,25 +30,35 @@ bool ModuleEditor::Init()
 
     LOG("Initialazing ImplSDL2_InitForOpenGL with window and context");
     ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer->getContext());
-    LOG("Initialazing ImGui with version 330");
-    ImGui_ImplOpenGL3_Init("330");
+    LOG("Initialazing ImGui with version 460");
+    ImGui_ImplOpenGL3_Init("#version 460");
+    //IMGUI_CHECKVERSION();
 
     return true;
+}
+
+update_status ModuleEditor::PreUpdate()
+{
+    ImGui_ImplOpenGL3_NewFrame(); //******ALGO PETA AQUI!!!****** : 
+    //<Source:API> <Type:Other> <Severity:low> <ID:131216> <Message:Program/shader state info: GLSL program 12 failed to link>
+    //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. <program> object is not successfully linked, or is not a program object.>
+    
+    ImGui_ImplSDL2_NewFrame(App->window->window);
+    ImGui::NewFrame();
+
+    return UPDATE_CONTINUE;
 }
 
 // Called every draw update
 update_status ModuleEditor::Update()
 {
-    ImGui_ImplOpenGL3_NewFrame(); //******ALGO PETA AQUI!!!****** : 
-    //<Source:API> <Type:Other> <Severity:low> <ID:131216> <Message:Program/shader state info: GLSL program 12 failed to link>
-    //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. <program> object is not successfully linked, or is not a program object.>
-    ImGui_ImplSDL2_NewFrame(App->window->window);
-    ImGui::NewFrame();
-
+    //glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+    //glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    bool* demo = new bool(true);
+    ImGui::ShowDemoWindow(demo);
     ImGui::Render();
-    glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData()); //******ALGO PETA AQUI!!!****** : 
     //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. <program> has not been linked, or is not a program object.>
     //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. <program> object is not successfully linked, or is not a program object.>
@@ -58,6 +67,11 @@ update_status ModuleEditor::Update()
 
     //ImGui_ImplSDL2_ProcessEvent(&event);
 
+    return UPDATE_CONTINUE;
+}
+
+update_status ModuleEditor::PostUpdate()
+{
     return UPDATE_CONTINUE;
 }
 
