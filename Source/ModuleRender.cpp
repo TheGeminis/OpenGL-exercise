@@ -128,6 +128,15 @@ update_status ModuleRender::PostUpdate()
 	return UPDATE_CONTINUE;
 }
 
+void ModuleRender::WindowResized(unsigned width, unsigned height)
+{
+}
+
+void* ModuleRender::getContext()
+{
+	return context;
+}
+
 // Called before quitting
 bool ModuleRender::CleanUp()
 {
@@ -137,14 +146,5 @@ bool ModuleRender::CleanUp()
 	SDL_GL_DeleteContext(context);
 
 	return true;
-}
-
-void ModuleRender::WindowResized(unsigned width, unsigned height)
-{
-}
-
-void* ModuleRender::getContext()
-{
-	return context;
 }
 

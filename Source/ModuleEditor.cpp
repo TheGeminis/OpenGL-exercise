@@ -30,8 +30,8 @@ bool ModuleEditor::Init()
 
     LOG("Initialazing ImplSDL2_InitForOpenGL with window and context");
     ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer->getContext());
-    LOG("Initialazing ImGui with version 460");
-    ImGui_ImplOpenGL3_Init("#version 460");
+    LOG("Initialazing ImGui with version 440");
+    ImGui_ImplOpenGL3_Init("#version 440");
     //IMGUI_CHECKVERSION();
 
     return true;
@@ -39,10 +39,7 @@ bool ModuleEditor::Init()
 
 update_status ModuleEditor::PreUpdate()
 {
-    ImGui_ImplOpenGL3_NewFrame(); //******ALGO PETA AQUI!!!****** : 
-    //<Source:API> <Type:Other> <Severity:low> <ID:131216> <Message:Program/shader state info: GLSL program 12 failed to link>
-    //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. <program> object is not successfully linked, or is not a program object.>
-    
+    ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame(App->window->window);
     ImGui::NewFrame();
 
@@ -57,13 +54,10 @@ update_status ModuleEditor::Update()
     //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     bool* demo = new bool(true);
     ImGui::ShowDemoWindow(demo);
+    ConfigurationWindow();
     ImGui::Render();
     
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData()); //******ALGO PETA AQUI!!!****** : 
-    //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. <program> has not been linked, or is not a program object.>
-    //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. <program> object is not successfully linked, or is not a program object.>
-    //<Source:API> <Type:Error> <Severity:high> <ID:1282> <Message:GL_INVALID_OPERATION error generated. No active program.>
-    //<Source:API> <Type:Error> <Severity:high> <ID:1281> <Message:GL_INVALID_VALUE error generated. <index> out of range.>
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     //ImGui_ImplSDL2_ProcessEvent(&event);
 
@@ -75,8 +69,46 @@ update_status ModuleEditor::PostUpdate()
     return UPDATE_CONTINUE;
 }
 
+void ModuleEditor::ConsoleWindow()
+{
+    
+}
+
+
+void ModuleEditor::ConfigurationWindow()
+{
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+
+    static float f = 0.0f;
+    static int counter = 0;
+
+    ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+    ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+    ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
+    ImGui::Checkbox("Another Window", &show_another_window);
+
+    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+    ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+    if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+        counter++;
+    ImGui::SameLine();
+    ImGui::Text("counter = %d", counter);
+
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::End();
+}
+
 // Called before quitting
 bool ModuleEditor::CleanUp()
 {
+    LOG("Destroying Module Editor");
+
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
     return true;
 }

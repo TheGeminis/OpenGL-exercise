@@ -39,7 +39,7 @@ update_status ModuleRenderExercise::PreUpdate()
 update_status ModuleRenderExercise::Update()
 {
 	//RenderTriangle(myTriangle, myProgram);
-	//RenderVBO(myTriangle, myProgram);
+	RenderVBO(myTriangle, myProgram);
 	
 	return UPDATE_CONTINUE;
 }

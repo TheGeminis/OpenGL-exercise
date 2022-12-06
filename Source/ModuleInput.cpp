@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "ModuleRender.h"
 #include "SDL/include/SDL.h"
+#include "imgui_impl_sdl.h"
 
 ModuleInput::ModuleInput()
 {}
@@ -46,6 +47,8 @@ update_status ModuleInput::Update()
     }
 
     keyboard = SDL_GetKeyboardState(NULL);
+
+    ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
 
     if (keyboard[SDL_SCANCODE_ESCAPE])
     {
