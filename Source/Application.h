@@ -11,7 +11,6 @@ class ModuleInput;
 class ModuleProgram;
 class ModuleRenderExercise;
 class ModuleEditor;
-class ModuleTimer;
 class ModuleDebugDraw;
 
 class Application
@@ -32,7 +31,6 @@ public:
 	ModuleProgram* program = nullptr;
 	ModuleRenderExercise* renderExercise = nullptr;
 	ModuleEditor* editor = nullptr;
-	ModuleTimer* timer = nullptr;
 	ModuleDebugDraw* debugDraw = nullptr;
 
 private:

@@ -10,11 +10,13 @@
 #include "libs/imgui/imgui_impl_sdl.h"
 
 ModuleEditor::ModuleEditor()
-{}
+{
+}
 
 // Destructor
 ModuleEditor::~ModuleEditor()
-{}
+{
+}
 
 // Called before render is available
 bool ModuleEditor::Init()
@@ -33,6 +35,12 @@ bool ModuleEditor::Init()
     LOG("Initialazing ImGui with version 440");
     ImGui_ImplOpenGL3_Init("#version 440");
     //IMGUI_CHECKVERSION();
+
+    fps_log = new float[60];
+    ms_log = new float[60];
+    fps_offset = 0;
+
+    timer.StartMilliseconds();
 
     return true;
 }
@@ -84,9 +92,13 @@ void ModuleEditor::ConfigurationWindow()
     static float f = 0.0f;
     static int counter = 0;
 
-    ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+    ms_log[fps_offset] = timer.ReadMilliseconds();
+    fps_log[fps_offset] = 1000 / ms_log[fps_offset];
+    timer.StartMilliseconds();
 
-    ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
+    ImGui::Begin("Configuration");                          // Create a window called "Hello, world!" and append into it.
+
+    /*ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
     ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
     ImGui::Checkbox("Another Window", &show_another_window);
 
@@ -97,15 +109,26 @@ void ModuleEditor::ConfigurationWindow()
         counter++;
     ImGui::SameLine();
     ImGui::Text("counter = %d", counter);
-
+    */
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
+    //fps_log[]
+    char title[25];
+    sprintf_s(title, 25, "Framerate %.1f", ImGui::GetIO().Framerate);
+    ImGui::PlotHistogram("##framerate", &fps_log[0], 60, fps_offset, title, 0.0f, 120.0f, ImVec2(310, 100));
     ImGui::End();
+
+    fps_offset++;
+    if (fps_offset > 59) fps_offset = 0;
 }
 
 // Called before quitting
 bool ModuleEditor::CleanUp()
 {
     LOG("Destroying Module Editor");
+
+    delete fps_log;
+    delete ms_log;
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();

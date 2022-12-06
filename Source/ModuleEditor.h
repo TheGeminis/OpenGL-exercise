@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "Timer.h"
 
 class ModuleEditor : public Module
 {
@@ -18,5 +19,8 @@ public:
 	bool CleanUp();
 
 private:
-
+	float* fps_log = nullptr;
+	float* ms_log = nullptr;
+	int fps_offset;
+	Timer timer;
 };
