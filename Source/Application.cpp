@@ -8,6 +8,7 @@
 #include "ModuleCamera.h"
 #include "ModuleEditor.h"
 #include "ModuleDebugDraw.h"
+#include "ModuleTexture.h"
 #include <shellapi.h>
 #include <winnt.h>
 
@@ -24,6 +25,7 @@ Application::Application()
 	modules.push_back(camera = new ModuleCamera());
 	modules.push_back(editor = new ModuleEditor());
 	modules.push_back(debugDraw = new ModuleDebugDraw());
+	modules.push_back(texture = new ModuleTexture());
 }
 
 Application::~Application()

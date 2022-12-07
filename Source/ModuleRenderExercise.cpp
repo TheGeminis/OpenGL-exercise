@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleProgram.h"
 #include "ModuleCamera.h"
+#include "ModuleTexture.h"
 #include <GL\glew.h>
 #include "MathGeoLib.h"
 
@@ -41,6 +42,8 @@ update_status ModuleRenderExercise::Update()
 {
 	RenderTriangle(myTriangle, myProgram);
 	//RenderVBO(myTriangle, myProgram);
+
+	App->texture->LoadTexture();
 	
 	return UPDATE_CONTINUE;
 }
