@@ -110,12 +110,55 @@ void ModuleEditor::ConfigurationWindow()
     ImGui::SameLine();
     ImGui::Text("counter = %d", counter);
     */
-    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+    ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / fps_log[fps_offset], fps_log[fps_offset]);
 
-    //fps_log[]
+    //Framerate and Milliseconds Histograms
     char title[25];
-    sprintf_s(title, 25, "Framerate %.1f", ImGui::GetIO().Framerate);
-    ImGui::PlotHistogram("##framerate", &fps_log[0], 60, fps_offset, title, 0.0f, 120.0f, ImVec2(310, 100));
+    sprintf_s(title, 25, "Framerate %.1f", fps_log[fps_offset]);
+    ImGui::PlotHistogram("##framerate", &fps_log[0], 60, fps_offset, title, 0.0f, 200.0f, ImVec2(310, 100));
+    sprintf_s(title, 25, "Milliseconds %.1f", ms_log[fps_offset]);
+    ImGui::PlotHistogram("##framerate", &ms_log[0], 60, fps_offset, title, 0.0f, 20.0f, ImVec2(310, 100));
+    
+    //Hardware information
+    ImGui::Separator();
+    ImGui::Text("Hardware information");
+    char value[75];
+    sprintf_s(value, 75, "%i (%ikb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
+    ImGui::Text("CPUs: ");				
+    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    sprintf_s(value, 75, "%iMb", SDL_GetSystemRAM());
+    ImGui::Text("System RAM: ");		
+    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    sprintf_s(value, 75, "");
+    sprintf_s(value, 75, "%s", glGetString(GL_RENDERER));
+    ImGui::Text("GPU Model: ");
+    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    sprintf_s(value, 75, "%s", glGetString(GL_VENDOR));
+    //ImGui::Text("GPU Brand: ");				
+    //ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+
+    //TODO: Get CPU Model
+
+    //Software information
+    SDL_version linked;
+    SDL_GetVersion(&linked);
+    ImGui::Separator();
+    ImGui::Text("Software information");
+    sprintf_s(value, 75, "%i", linked.major);
+    ImGui::Text("SDL Linked Major Version: ");
+    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    sprintf_s(value, 75, "%i", linked.minor);
+    ImGui::Text("SDL Linked Minor Version: ");
+    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    sprintf_s(value, 75, "%i", linked.patch);
+    ImGui::Text("SDL Linked Patch Version: ");
+    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    sprintf_s(value, 75, "%i", GL_VERSION);
+    ImGui::Text("OpenGL version: ");
+    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+
+    //TODO: Get DevIL Version
+
     ImGui::End();
 
     fps_offset++;
