@@ -1,6 +1,7 @@
 #include "ModuleRenderExercise.h"
 #include "Application.h"
 #include "ModuleProgram.h"
+#include "ModuleCamera.h"
 #include <GL\glew.h>
 #include "MathGeoLib.h"
 
@@ -38,8 +39,8 @@ update_status ModuleRenderExercise::PreUpdate()
 
 update_status ModuleRenderExercise::Update()
 {
-	//RenderTriangle(myTriangle, myProgram);
-	RenderVBO(myTriangle, myProgram);
+	RenderTriangle(myTriangle, myProgram);
+	//RenderVBO(myTriangle, myProgram);
 	
 	return UPDATE_CONTINUE;
 }
@@ -47,37 +48,6 @@ update_status ModuleRenderExercise::Update()
 update_status ModuleRenderExercise::PostUpdate()
 {
 	return UPDATE_CONTINUE;
-}
-
-float4x4 ModuleRenderExercise::getProjectionMatrix()
-{
-	Frustum frustum;
-	frustum.type = FrustumType::PerspectiveFrustum;
-	frustum.pos = float3::zero;
-	frustum.front = -float3::unitZ;
-	frustum.up = float3::unitY;
-	frustum.nearPlaneDistance = 0.1f;
-	frustum.farPlaneDistance = 100.0f;
-	frustum.verticalFov = math::pi / 4.0f;
-	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * (16.0f/9.0f)); //aspect;
-	return frustum.ProjectionMatrix();
-}
-
-float4x4 ModuleRenderExercise::getModelMatrix()
-{
-	//return float4x4::identity;
-	return float4x4::FromTRS(
-		float3(2.0f, 0.0f, 0.0f),
-		float4x4::RotateZ(pi / 4.0f),
-		float3(2.0f, 1.0f, 0.0f)
-	);
-	//model.Transpose();
-	//return model;
-}
-
-float4x4 ModuleRenderExercise::getViewMatrix()
-{
-	return float4x4::LookAt(float3(0.0f, 4.0f, 8.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3(0.0f, 0.0f, 0.0f));
 }
 
 // This function must be called one time at creation of vertex buffer
@@ -116,11 +86,11 @@ void ModuleRenderExercise::RenderTriangle(unsigned vbo, unsigned program)
 	float4x4 proj, view, model;
 
 	// TODO: retrieve projection, view and model
-	proj = getProjectionMatrix();
-	view = getViewMatrix();
-	model = getModelMatrix();
+	proj = App->camera->getProjectionMatrix();
+	view = App->camera->getViewMatrix();
+	model = App->camera->getModelMatrix();
 
-	model.Transpose();
+	//model.Transpose();
 
 	glUseProgram(program);
 	glUniformMatrix4fv(0, 1, GL_TRUE, &proj[0][0]);

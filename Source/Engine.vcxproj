@@ -182,6 +182,7 @@
     <ClCompile Include="libs\MathGeoLib-1.5\Time\Clock.cpp" />
     <ClCompile Include="log.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ModuleCamera.cpp" />
     <ClCompile Include="ModuleDebugDraw.cpp" />
     <ClCompile Include="ModuleEditor.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
@@ -265,6 +266,7 @@
     <ClInclude Include="libs\MathGeoLib-1.5\Math\TransformOps.h" />
     <ClInclude Include="libs\MathGeoLib-1.5\Time\Clock.h" />
     <ClInclude Include="Module.h" />
+    <ClInclude Include="ModuleCamera.h" />
     <ClInclude Include="ModuleDebugDraw.h" />
     <ClInclude Include="ModuleEditor.h" />
     <ClInclude Include="ModuleInput.h" />
@@ -451,7 +453,6 @@
     <Object Include="x64\Debug\ModuleProgram.obj" />
     <Object Include="x64\Debug\ModuleRender.obj" />
     <Object Include="x64\Debug\ModuleRenderExercise.obj" />
-    <Object Include="x64\Debug\ModuleTimer.obj" />
     <Object Include="x64\Debug\ModuleWindow.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
