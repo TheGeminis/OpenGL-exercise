@@ -63,6 +63,7 @@ update_status ModuleEditor::Update()
     bool* demo = new bool(true);
     ImGui::ShowDemoWindow(demo);
     ConfigurationWindow();
+    AboutWindow();
     ImGui::Render();
     
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -83,14 +84,33 @@ void ModuleEditor::ConsoleWindow()
 }
 
 
+void ModuleEditor::AboutWindow()
+{
+    ImGui::Begin("About");
+
+    ImGui::Text("Geometry Viewer developed for the first assaignment of the \"Advanced Programming for AAA Video Games\" master's degree.");
+    ImGui::Text("Author: Jan Marc Costa");
+    ImGui::Separator();
+    ImGui::Text("General Info:");
+    ImGui::BulletText("SDL 2.0");
+    ImGui::BulletText("glew 2.1.0");
+    ImGui::BulletText("imgui 1.88");
+    ImGui::BulletText("MathGeoLib 1.5");
+    ImGui::Separator();
+    if (ImGui::Button("GitHub")) App->RequestBrowser();
+
+    ImGui::End();
+}
+
+
 void ModuleEditor::ConfigurationWindow()
 {
-    bool show_demo_window = true;
+    /*bool show_demo_window = true;
     bool show_another_window = false;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
     static float f = 0.0f;
-    static int counter = 0;
+    static int counter = 0;*/
 
     ms_log[fps_offset] = timer.ReadMilliseconds();
     fps_log[fps_offset] = 1000 / ms_log[fps_offset];
@@ -123,19 +143,23 @@ void ModuleEditor::ConfigurationWindow()
     ImGui::Separator();
     ImGui::Text("Hardware information");
     char value[75];
-    sprintf_s(value, 75, "%i (%ikb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
+    sprintf_s(value, 75, "%i (Cache: %ikb)", SDL_GetCPUCount(), SDL_GetCPUCacheLineSize());
     ImGui::Text("CPUs: ");				
-    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    ImGui::SameLine(); 
+    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
     sprintf_s(value, 75, "%iMb", SDL_GetSystemRAM());
     ImGui::Text("System RAM: ");		
-    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    ImGui::SameLine(); 
+    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
     sprintf_s(value, 75, "");
     sprintf_s(value, 75, "%s", glGetString(GL_RENDERER));
     ImGui::Text("GPU Model: ");
-    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    ImGui::SameLine(); 
+    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
     sprintf_s(value, 75, "%s", glGetString(GL_VENDOR));
     //ImGui::Text("GPU Brand: ");				
-    //ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    //ImGui::SameLine(); 
+    //ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
 
     //TODO: Get CPU Model
 
@@ -144,18 +168,11 @@ void ModuleEditor::ConfigurationWindow()
     SDL_GetVersion(&linked);
     ImGui::Separator();
     ImGui::Text("Software information");
-    sprintf_s(value, 75, "%i", linked.major);
-    ImGui::Text("SDL Linked Major Version: ");
-    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
-    sprintf_s(value, 75, "%i", linked.minor);
-    ImGui::Text("SDL Linked Minor Version: ");
-    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
-    sprintf_s(value, 75, "%i", linked.patch);
-    ImGui::Text("SDL Linked Patch Version: ");
-    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    ImGui::Text("SDL Version: %i.%i.%i", linked.major, linked.minor, linked.patch);
     sprintf_s(value, 75, "%i", GL_VERSION);
     ImGui::Text("OpenGL version: ");
-    ImGui::SameLine(); ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
+    ImGui::SameLine(); 
+    ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
 
     //TODO: Get DevIL Version
 

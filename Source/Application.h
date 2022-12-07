@@ -22,6 +22,7 @@ public:
 
 	bool Init();
 	update_status Update();
+	void RequestBrowser();
 	bool CleanUp();
 
 public:

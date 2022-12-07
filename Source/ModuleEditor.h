@@ -15,6 +15,7 @@ public:
 	update_status Update();
 	update_status PostUpdate();
 	void ConsoleWindow();
+	void AboutWindow();
 	void ConfigurationWindow();
 	bool CleanUp();
 

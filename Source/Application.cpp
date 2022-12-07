@@ -7,6 +7,8 @@
 #include "ModuleRenderExercise.h"
 #include "ModuleEditor.h"
 #include "ModuleDebugDraw.h"
+#include <shellapi.h>
+#include <winnt.h>
 
 using namespace std;
 
@@ -17,8 +19,8 @@ Application::Application()
 	modules.push_back(input = new ModuleInput());
 	modules.push_back(renderer = new ModuleRender());
 	modules.push_back(program = new ModuleProgram());
-	modules.push_back(editor = new ModuleEditor());
 	modules.push_back(renderExercise = new ModuleRenderExercise());
+	modules.push_back(editor = new ModuleEditor());
 	modules.push_back(debugDraw = new ModuleDebugDraw());
 }
 
@@ -53,6 +55,11 @@ update_status Application::Update()
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		ret = (*it)->PostUpdate();
 	return ret;
+}
+
+void Application::RequestBrowser()
+{
+	ShellExecuteA(0, 0, "https://github.com/TheGeminis/OpenGL-exercise", 0, 0, SW_SHOW);
 }
 
 bool Application::CleanUp()
