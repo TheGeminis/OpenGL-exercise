@@ -12,8 +12,32 @@ ModuleCamera::~ModuleCamera()
 
 bool ModuleCamera::Init()
 {
+	horizon_fov = 200.0f;
+
 	LOG("Setting Frustum Type to PerspectiveFrustum");
 	frustum.type = FrustumType::PerspectiveFrustum;
+	
+	frustum.nearPlaneDistance = 0.1f;
+	frustum.farPlaneDistance = 100.0f;
+
+	//Axis arrow -> (x, y, z) -> (red, green, blue)
+	frustum.pos = float3(1.0f, 1.0f, 1.0f);
+	float3 target = float3(0.0f, 0.0f, 0.0f);
+
+	frustum.horizontalFov = DegToRad(horizon_fov);
+	frustum.verticalFov = frustum.horizontalFov / ((float)FULL_SCREEN_WIDTH / (float)FULL_SCREEN_HEIGHT);
+
+	float3 forward = target - frustum.pos;
+	forward.Normalize();
+	float3 up = float3::unitY;
+	float3 right = Cross(forward, up);
+	right.Normalize();
+	up = Cross(right, forward);
+	up.Normalize();
+
+	frustum.front = forward;
+	frustum.up = up;
+
 	return true;
 }
 
@@ -59,7 +83,7 @@ float4x4 ModuleCamera::getModelMatrix()
 
 float4x4 ModuleCamera::getViewMatrix()
 {
-	//return float4x4::LookAt(float3(0.0f, 4.0f, 8.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3(0.0f, 0.0f, 0.0f));
+	//return float4x4::LookAt(float3(0.0f, 0.0f, 0.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3(0.0f, 0.0f, 0.0f));
 	return float4x4(frustum.ViewMatrix());
 }
 

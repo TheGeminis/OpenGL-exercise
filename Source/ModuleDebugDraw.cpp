@@ -1,5 +1,8 @@
 #include "Globals.h"
 #include "ModuleDebugDraw.h"
+#include "Application.h"
+#include "ModuleCamera.h"
+#include "ModuleWindow.h"
 
 #define DEBUG_DRAW_IMPLEMENTATION
 #include "DebugDraw.h"     // Debug Draw API. Notice that we need the DEBUG_DRAW_IMPLEMENTATION macro here!
@@ -608,7 +611,11 @@ bool ModuleDebugDraw::CleanUp()
 
 update_status  ModuleDebugDraw::Update()
 {
-	return UPDATE_CONTINUE;
+    dd::axisTriad(float4x4::identity, 0.1f, 1.0f);
+    dd::xzSquareGrid(-10.0f, 10.0f, 0.0f, 1.0f, dd::colors::Gray);
+    Draw(App->camera->getViewMatrix(), App->camera->getProjectionMatrix(), FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT);
+    
+    return UPDATE_CONTINUE;
 }
 
 void ModuleDebugDraw::Draw(const float4x4& view, const float4x4& proj, unsigned width, unsigned height)

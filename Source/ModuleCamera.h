@@ -20,4 +20,5 @@ public:
 
 private:
 	Frustum frustum;
+	float horizon_fov;
 };

@@ -69,6 +69,7 @@ bool ModuleRender::Init()
 	// … check for errors
 	LOG("Using Glew %s", glewGetString(GLEW_VERSION)); // Should be 2.0
 
+	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 	glEnable(GL_DEBUG_OUTPUT); //→ Enable Output Callbacks
 	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS); //→ Output Callbacks
 	glDebugMessageCallback(&OurOpenGLErrorFunction, nullptr); //→ sets the callback
@@ -88,10 +89,10 @@ bool ModuleRender::Init()
 	glFrontFace(GL_CCW); // Front faces will be counter clockwise
 
 	//Initialize render pipeline options
-	LOG("Specifying Culling to back-facing");
-	glCullFace(GL_BACK);
-	LOG("Specifying Culling to Counter Clockwise");
-	glCullFace(GL_CCW); //******ALGO PETA AQUI!!!******  :
+	//LOG("Specifying Culling to back-facing");
+	//glCullFace(GL_BACK);
+	//LOG("Specifying Culling to Counter Clockwise");
+	//glCullFace(GL_CCW); //******ALGO PETA AQUI!!!******  :
 	//<Source:API> <Type:Error> <Severity:high> <ID:1280> <Message:GL_INVALID_ENUM error generated. <mode> is not a valid face culling mode.>
 
 	return true;
@@ -105,7 +106,7 @@ update_status ModuleRender::PreUpdate()
 		1.1- Use SDL_GetWindowSize
 	*/
 	//windowSize = SDL_GetWindowSize(App->window->window);
-	glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+	glViewport(0, 0, FULL_SCREEN_WIDTH, FULL_SCREEN_HEIGHT);
 
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

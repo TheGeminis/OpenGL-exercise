@@ -14,9 +14,6 @@ public:
 	update_status Update();
 	update_status PostUpdate();
 	unsigned CreateTriangleVBO();
-	float4x4 getProjectionMatrix();
-	float4x4 getModelMatrix();
-	float4x4 getViewMatrix();
 	void RenderVBO(unsigned vbo, unsigned program);
 	void RenderTriangle(unsigned vbo, unsigned program);
 	void DestroyVBO(unsigned vbo);
