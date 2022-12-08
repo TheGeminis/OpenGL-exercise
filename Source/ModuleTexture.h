@@ -15,12 +15,9 @@ public:
 	update_status PreUpdate();
 	update_status Update();
 	update_status PostUpdate();
-	void LoadTexture();
+	bool LoadTexture(const wchar_t* filename, TexMetadata *md, ScratchImage &img);
 	bool CleanUp();
 
 private:
-	const wchar_t* filename = L"C:/Users/usuario/source/repos/OpenGL - exercise/Source/assets/textures";
-	TexMetadata md;
-	ScratchImage img;
 
 };

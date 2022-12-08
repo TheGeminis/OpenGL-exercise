@@ -34,7 +34,6 @@ bool ModuleEditor::Init()
     ImGui_ImplSDL2_InitForOpenGL(App->window->window, App->renderer->getContext());
     LOG("Initialazing ImGui with version 440");
     ImGui_ImplOpenGL3_Init("#version 440");
-    //IMGUI_CHECKVERSION();
 
     fps_log = new float[60];
     ms_log = new float[60];
@@ -57,9 +56,6 @@ update_status ModuleEditor::PreUpdate()
 // Called every draw update
 update_status ModuleEditor::Update()
 {
-    //glViewport(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-    //glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-    //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     bool* demo = new bool(true);
     ImGui::ShowDemoWindow(demo);
     ConfigurationWindow();
@@ -67,8 +63,6 @@ update_status ModuleEditor::Update()
     ImGui::Render();
     
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-    //ImGui_ImplSDL2_ProcessEvent(&event);
 
     if (quit_button) return UPDATE_STOP;
 
@@ -108,31 +102,11 @@ void ModuleEditor::AboutWindow()
 
 void ModuleEditor::ConfigurationWindow()
 {
-    /*bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-    static float f = 0.0f;
-    static int counter = 0;*/
-
     ms_log[fps_offset] = timer.ReadMilliseconds();
     fps_log[fps_offset] = 1000 / ms_log[fps_offset];
     timer.StartMilliseconds();
 
-    ImGui::Begin("Configuration");                          // Create a window called "Hello, world!" and append into it.
-
-    /*ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-    ImGui::Checkbox("Demo Window", &show_demo_window);      // Edit bools storing our window open/close state
-    ImGui::Checkbox("Another Window", &show_another_window);
-
-    ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-    ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-
-    if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-        counter++;
-    ImGui::SameLine();
-    ImGui::Text("counter = %d", counter);
-    */
+    ImGui::Begin("Configuration"); 
     ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / fps_log[fps_offset], fps_log[fps_offset]);
 
     //Framerate and Milliseconds Histograms

@@ -5,6 +5,7 @@
 #include "ModuleTexture.h"
 #include <GL\glew.h>
 #include "MathGeoLib.h"
+#include "DirectXTex.h"
 
 ModuleRenderExercise::ModuleRenderExercise()
 {
@@ -29,6 +30,7 @@ bool ModuleRenderExercise::Init()
 			App->program->CompileShader(GL_VERTEX_SHADER, App->program->LoadShaderSource("../default_vertex.glsl")), 
 			App->program->CompileShader(GL_FRAGMENT_SHADER, App->program->LoadShaderSource("../default_fragment.glsl"))
 		);
+	if (!InitTexture()) return false;
 	return true;
 }
 
@@ -69,6 +71,54 @@ unsigned ModuleRenderExercise::CreateTriangleVBO()
 	return vbo;
 }
 
+bool ModuleRenderExercise::InitTexture()
+{
+	static const wchar_t* filename = L"../assets/textures/BaboonTexture.png";
+	TexMetadata md;
+	ScratchImage img, imgFR;
+	int internal_format, format, type;
+
+	if (!App->texture->LoadTexture(filename, &md, img))
+	{
+		LOG("Texture Failed To Load");
+		return false;
+	}
+
+	glGenTextures(1, &gl_texture);
+	glBindTexture(GL_TEXTURE_2D, gl_texture);
+	
+	switch (md.format) {
+	case DXGI_FORMAT_R8G8B8A8_UNORM_SRGB:
+	case DXGI_FORMAT_R8G8B8A8_UNORM:
+		internal_format = GL_RGBA8;
+		format = GL_RGBA;
+		type = GL_UNSIGNED_BYTE;
+		break;
+	case DXGI_FORMAT_B8G8R8A8_UNORM_SRGB:
+	case DXGI_FORMAT_B8G8R8A8_UNORM:
+		internal_format = GL_RGBA8;
+		format = GL_BGRA;
+		type = GL_UNSIGNED_BYTE;
+		break;
+	case DXGI_FORMAT_B5G6R5_UNORM:
+		internal_format = GL_RGB8;
+		format = GL_BGR;
+		type = GL_UNSIGNED_BYTE;
+		break;
+	default:
+		assert(false && "Unsupported format");
+	}
+
+	FlipRotate(img.GetImages(), img.GetImageCount(), img.GetMetadata(), TEX_FR_FLIP_VERTICAL, imgFR);
+	glTexImage2D(GL_TEXTURE_2D, 0, internal_format, md.width, md.height, 0, format, type, imgFR.GetImage(0, 0, 0)->pixels);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	return true;
+}
+
 // This function must be called each frame for drawing the triangle
 void ModuleRenderExercise::RenderVBO(unsigned vbo, unsigned program)
 {
@@ -102,6 +152,13 @@ void ModuleRenderExercise::RenderTriangle(unsigned vbo, unsigned program)
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
+	
+	//Bind Texture
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, (void*)(sizeof(float) * 3 * 4));
+	glActiveTexture(GL_TEXTURE5);
+	glBindTexture(GL_TEXTURE_2D, gl_texture);
+	
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
