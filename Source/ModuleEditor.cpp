@@ -175,6 +175,7 @@ void ModuleEditor::ConfigurationWindow()
     ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), value);
 
     //TODO: Get DevIL Version
+    //TODO: DirectXTex Version
 
     ImGui::End();
 

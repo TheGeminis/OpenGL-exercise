@@ -43,6 +43,12 @@ update_status ModuleInput::Update()
                 if (sdlEvent.window.event == SDL_WINDOWEVENT_RESIZED || sdlEvent.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
                     App->renderer->WindowResized(sdlEvent.window.data1, sdlEvent.window.data2);
                 break;
+            case SDL_MOUSEBUTTONDOWN:
+                if (sdlEvent.button.button == SDL_BUTTON_RIGHT) right_click = true;
+                break;
+            case SDL_MOUSEBUTTONUP:
+                if (sdlEvent.button.button == SDL_BUTTON_RIGHT) right_click = false;
+                break;
         }
     }
 
@@ -51,12 +57,17 @@ update_status ModuleInput::Update()
     ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
 
     if (keyboard[SDL_SCANCODE_ESCAPE]) return UPDATE_STOP;
-    if (keyboard[SDL_SCANCODE_W]) App->camera->MoveForward();
-    if (keyboard[SDL_SCANCODE_S]) App->camera->MoveBackward();
-    if (keyboard[SDL_SCANCODE_A]) App->camera->MoveLeft();
-    if (keyboard[SDL_SCANCODE_D]) App->camera->MoveRight();
-    if (keyboard[SDL_SCANCODE_SPACE]) App->camera->MoveUp();
-    if (keyboard[SDL_SCANCODE_LSHIFT]) App->camera->MoveDown();
+    
+    if (right_click) {
+        bool fast = false;
+        if (keyboard[SDL_SCANCODE_LSHIFT]) fast = true;
+        if (keyboard[SDL_SCANCODE_W]) App->camera->MoveForward(fast);
+        if (keyboard[SDL_SCANCODE_S]) App->camera->MoveBackward(fast);
+        if (keyboard[SDL_SCANCODE_A]) App->camera->MoveLeft(fast);
+        if (keyboard[SDL_SCANCODE_D]) App->camera->MoveRight(fast);
+        if (keyboard[SDL_SCANCODE_SPACE]) App->camera->MoveUp(fast);
+        if (keyboard[SDL_SCANCODE_X]) App->camera->MoveDown(fast);
+    }
 
 
     return UPDATE_CONTINUE;

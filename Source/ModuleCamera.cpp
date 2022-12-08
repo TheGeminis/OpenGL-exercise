@@ -89,33 +89,45 @@ float4x4 ModuleCamera::getViewMatrix()
 	return float4x4(frustum.ViewMatrix());
 }
 
-void ModuleCamera::MoveUp() {
-	float3 translation = float3(0.0f, App->getDeltaTime() * camera_speed, 0.0f);
+void ModuleCamera::MoveUp(bool fast) {
+	float3 translation;
+	if (fast) translation = float3(0.0f, App->getDeltaTime() * camera_speed * 2, 0.0f);
+	else translation = float3(0.0f, App->getDeltaTime() * camera_speed, 0.0f);
 	CameraTranslation(translation);
 }
 
-void ModuleCamera::MoveDown() {
-	float3 translation = float3(0.0f, App->getDeltaTime() * -camera_speed, 0.0f);
+void ModuleCamera::MoveDown(bool fast) {
+	float3 translation;
+	if (fast) translation = float3(0.0f, App->getDeltaTime() * -camera_speed * 2, 0.0f);
+	else translation = float3(0.0f, App->getDeltaTime() * -camera_speed, 0.0f);
 	CameraTranslation(translation);
 }
 
-void ModuleCamera::MoveRight() {
-	float3 translation = float3(App->getDeltaTime() * camera_speed, 0.0f, 0.0f);
+void ModuleCamera::MoveRight(bool fast) {
+	float3 translation;
+	if (fast) translation = float3(App->getDeltaTime() * camera_speed * 2, 0.0f, 0.0f);
+	else translation = float3(App->getDeltaTime() * camera_speed, 0.0f, 0.0f);
 	CameraTranslation(translation);
 }
 
-void ModuleCamera::MoveLeft() {
-	float3 translation = float3(App->getDeltaTime() * -camera_speed, 0.0f, 0.0f);
+void ModuleCamera::MoveLeft(bool fast) {
+	float3 translation;
+	if (fast) translation = float3(App->getDeltaTime() * -camera_speed * 2, 0.0f, 0.0f);
+	else translation = float3(App->getDeltaTime() * -camera_speed, 0.0f, 0.0f);
 	CameraTranslation(translation);
 }
 
-void ModuleCamera::MoveForward() {
-	float3 translation = float3(0.0f, 0.0f, App->getDeltaTime() * camera_speed);
+void ModuleCamera::MoveForward(bool fast) {
+	float3 translation;
+	if (fast) translation = float3(0.0f, 0.0f, App->getDeltaTime() * camera_speed * 2);
+	else translation = float3(0.0f, 0.0f, App->getDeltaTime() * camera_speed);
 	CameraTranslation(translation);
 }
 
-void ModuleCamera::MoveBackward() {
-	float3 translation = float3(0.0f, 0.0f, App->getDeltaTime() * -camera_speed);
+void ModuleCamera::MoveBackward(bool fast) {
+	float3 translation;
+	if (fast) translation = float3(0.0f, 0.0f, App->getDeltaTime() * -camera_speed * 2);
+	else translation = float3(0.0f, 0.0f, App->getDeltaTime() * -camera_speed);
 	CameraTranslation(translation);
 }
 

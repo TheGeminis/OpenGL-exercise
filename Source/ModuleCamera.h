@@ -16,12 +16,12 @@ public:
 	float4x4 getProjectionMatrix();
 	float4x4 getModelMatrix();
 	float4x4 getViewMatrix();
-	void MoveUp();
-	void MoveDown();
-	void MoveRight();
-	void MoveLeft();
-	void MoveForward();
-	void MoveBackward();
+	void MoveUp(bool fast);
+	void MoveDown(bool fast);
+	void MoveRight(bool fast);
+	void MoveLeft(bool fast);
+	void MoveForward(bool fast);
+	void MoveBackward(bool fast);
 	void CameraTranslation(float3& translation);
 	bool CleanUp();
 
