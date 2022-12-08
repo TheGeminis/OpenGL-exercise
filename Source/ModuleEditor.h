@@ -24,4 +24,5 @@ private:
 	float* ms_log = nullptr;
 	int fps_offset;
 	Timer timer;
+	bool quit_button = false;
 };

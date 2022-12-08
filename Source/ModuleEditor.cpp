@@ -70,6 +70,8 @@ update_status ModuleEditor::Update()
 
     //ImGui_ImplSDL2_ProcessEvent(&event);
 
+    if (quit_button) return UPDATE_STOP;
+
     return UPDATE_CONTINUE;
 }
 
@@ -98,6 +100,7 @@ void ModuleEditor::AboutWindow()
     ImGui::BulletText("MathGeoLib 1.5");
     ImGui::Separator();
     if (ImGui::Button("GitHub")) App->RequestBrowser();
+    if (ImGui::Button("Quit")) quit_button = true;
 
     ImGui::End();
 }
