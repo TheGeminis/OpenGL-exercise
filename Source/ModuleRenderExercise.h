@@ -21,6 +21,6 @@ public:
 	bool CleanUp();
 
 private:
-	unsigned myTriangle = 0;
-	unsigned myProgram = 0;
+	unsigned myTriangle;
+	unsigned myProgram;
 };

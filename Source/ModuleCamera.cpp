@@ -1,4 +1,5 @@
 #include "ModuleCamera.h"
+#include "Application.h"
 
 
 ModuleCamera::ModuleCamera()
@@ -12,7 +13,8 @@ ModuleCamera::~ModuleCamera()
 
 bool ModuleCamera::Init()
 {
-	horizon_fov = 200.0f;
+	horizon_fov = 150.0f;
+	camera_speed = 1.0f;
 
 	LOG("Setting Frustum Type to PerspectiveFrustum");
 	frustum.type = FrustumType::PerspectiveFrustum;
@@ -28,8 +30,8 @@ bool ModuleCamera::Init()
 	frustum.verticalFov = frustum.horizontalFov / ((float)FULL_SCREEN_WIDTH / (float)FULL_SCREEN_HEIGHT);
 
 	float3 forward = target - frustum.pos;
-	forward.Normalize();
 	float3 up = float3::unitY;
+	forward.Normalize();
 	float3 right = Cross(forward, up);
 	right.Normalize();
 	up = Cross(right, forward);
@@ -37,6 +39,16 @@ bool ModuleCamera::Init()
 
 	frustum.front = forward;
 	frustum.up = up;
+
+	/*Frustum frustum;
+	frustum.type = FrustumType::PerspectiveFrustum;
+	frustum.pos = float3::zero;
+	frustum.front = -float3::unitZ;
+	frustum.up = float3::unitY;
+	frustum.nearPlaneDistance = 0.1f;
+	frustum.farPlaneDistance = 100.0f;
+	frustum.verticalFov = math::pi / 4.0f;
+	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * 1.0f);*/
 
 	return true;
 }
@@ -58,14 +70,6 @@ update_status ModuleCamera::PostUpdate()
 
 float4x4 ModuleCamera::getProjectionMatrix()
 {
-	/*frustum.pos = float3::zero;
-	frustum.front = -float3::unitZ;
-	frustum.up = float3::unitY;
-	frustum.nearPlaneDistance = 0.1f;
-	frustum.farPlaneDistance = 100.0f;
-	frustum.verticalFov = math::pi / 4.0f;
-	frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * (16.0f / 9.0f)); //aspect;
-	*/
 	return frustum.ProjectionMatrix();
 }
 
@@ -77,14 +81,48 @@ float4x4 ModuleCamera::getModelMatrix()
 		float4x4::RotateZ(pi / 4.0f),
 		float3(2.0f, 1.0f, 0.0f)
 	);*/
-	//model.Transpose();
-	//return model;
 }
 
 float4x4 ModuleCamera::getViewMatrix()
 {
 	//return float4x4::LookAt(float3(0.0f, 0.0f, 0.0f), float3(0.0f, 0.0f, 0.0f), float3::unitY, float3(0.0f, 0.0f, 0.0f));
 	return float4x4(frustum.ViewMatrix());
+}
+
+void ModuleCamera::MoveUp() {
+	float3 translation = float3(0.0f, App->getDeltaTime() * camera_speed, 0.0f);
+	CameraTranslation(translation);
+}
+
+void ModuleCamera::MoveDown() {
+	float3 translation = float3(0.0f, App->getDeltaTime() * -camera_speed, 0.0f);
+	CameraTranslation(translation);
+}
+
+void ModuleCamera::MoveRight() {
+	float3 translation = float3(App->getDeltaTime() * camera_speed, 0.0f, 0.0f);
+	CameraTranslation(translation);
+}
+
+void ModuleCamera::MoveLeft() {
+	float3 translation = float3(App->getDeltaTime() * -camera_speed, 0.0f, 0.0f);
+	CameraTranslation(translation);
+}
+
+void ModuleCamera::MoveForward() {
+	float3 translation = float3(0.0f, 0.0f, App->getDeltaTime() * camera_speed);
+	CameraTranslation(translation);
+}
+
+void ModuleCamera::MoveBackward() {
+	float3 translation = float3(0.0f, 0.0f, App->getDeltaTime() * -camera_speed);
+	CameraTranslation(translation);
+}
+
+void ModuleCamera::CameraTranslation(float3& translation) {
+	frustum.pos += frustum.WorldRight() * translation.x;
+	frustum.pos += float3(0.0f, 1.0f, 0.0f) * translation.y;
+	frustum.pos += frustum.front * translation.z;
 }
 
 bool ModuleCamera::CleanUp()

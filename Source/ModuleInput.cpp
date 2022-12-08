@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleRender.h"
+#include "ModuleCamera.h"
 #include "SDL/include/SDL.h"
 #include "imgui_impl_sdl.h"
 
@@ -24,7 +25,6 @@ bool ModuleInput::Init()
 		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
-
 	return ret;
 }
 
@@ -50,10 +50,14 @@ update_status ModuleInput::Update()
 
     ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
 
-    if (keyboard[SDL_SCANCODE_ESCAPE])
-    {
-        return UPDATE_STOP;
-    }
+    if (keyboard[SDL_SCANCODE_ESCAPE]) return UPDATE_STOP;
+    if (keyboard[SDL_SCANCODE_W]) App->camera->MoveForward();
+    if (keyboard[SDL_SCANCODE_S]) App->camera->MoveBackward();
+    if (keyboard[SDL_SCANCODE_A]) App->camera->MoveLeft();
+    if (keyboard[SDL_SCANCODE_D]) App->camera->MoveRight();
+    if (keyboard[SDL_SCANCODE_SPACE]) App->camera->MoveUp();
+    if (keyboard[SDL_SCANCODE_LSHIFT]) App->camera->MoveDown();
+
 
     return UPDATE_CONTINUE;
 }

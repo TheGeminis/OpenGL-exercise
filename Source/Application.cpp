@@ -38,6 +38,8 @@ Application::~Application()
 
 bool Application::Init()
 {
+	delta_timer.StartMilliseconds();
+	
 	bool ret = true;
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret; ++it)
@@ -49,6 +51,9 @@ bool Application::Init()
 update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
+
+	delta_time = delta_timer.ReadMilliseconds() / 1000.0f;
+	delta_timer.StartMilliseconds();
 
 	for(list<Module*>::iterator it = modules.begin(); it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 		ret = (*it)->PreUpdate();
@@ -65,6 +70,12 @@ void Application::RequestBrowser()
 {
 	ShellExecuteA(0, 0, "https://github.com/TheGeminis/OpenGL-exercise", 0, 0, SW_SHOW);
 }
+
+float Application::getDeltaTime()
+{
+	return delta_time;
+}
+
 
 bool Application::CleanUp()
 {

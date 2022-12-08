@@ -3,6 +3,7 @@
 #include<list>
 #include "Globals.h"
 #include "Module.h"
+#include "Timer.h"
 
 class ModuleRender;
 class ModuleWindow;
@@ -25,6 +26,7 @@ public:
 	bool Init();
 	update_status Update();
 	void RequestBrowser();
+	float getDeltaTime();
 	bool CleanUp();
 
 public:
@@ -41,6 +43,8 @@ public:
 private:
 
 	std::list<Module*> modules;
+	float delta_time;
+	Timer delta_timer;
 
 };
 

@@ -17,8 +17,8 @@ ModuleRenderExercise::~ModuleRenderExercise()
 
 bool ModuleRenderExercise::Init()
 {
-	// loads a triangle into a VBO with vertices: (-1, -1, 0) (1, -1, 0) (0, 1, 0)
-	LOG("Loading Triangle into a VBO with vertices: (-1, -1, 0) (1, -1, 0) (0, 1, 0)");
+	// loads a triangle into a VBO
+	LOG("Loading Triangle into a VBO");
 	myTriangle = CreateTriangleVBO();
 
 	// creates a program with Hello World vertex and fragment shaders
@@ -29,7 +29,6 @@ bool ModuleRenderExercise::Init()
 			App->program->CompileShader(GL_VERTEX_SHADER, App->program->LoadShaderSource("../default_vertex.glsl")), 
 			App->program->CompileShader(GL_FRAGMENT_SHADER, App->program->LoadShaderSource("../default_fragment.glsl"))
 		);
-
 	return true;
 }
 
@@ -42,8 +41,6 @@ update_status ModuleRenderExercise::Update()
 {
 	RenderTriangle(myTriangle, myProgram);
 	//RenderVBO(myTriangle, myProgram);
-
-	App->texture->LoadTexture();
 	
 	return UPDATE_CONTINUE;
 }
@@ -95,7 +92,7 @@ void ModuleRenderExercise::RenderTriangle(unsigned vbo, unsigned program)
 	model = App->camera->getModelMatrix();
 
 	//model.Transpose();
-
+	
 	glUseProgram(program);
 	glUniformMatrix4fv(0, 1, GL_TRUE, &proj[0][0]);
 	glUniformMatrix4fv(1, 1, GL_TRUE, &view[0][0]);
@@ -105,7 +102,7 @@ void ModuleRenderExercise::RenderTriangle(unsigned vbo, unsigned program)
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-	glDrawArrays(GL_TRIANGLES, 0, 4);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
 // This function must be called one time at destruction of vertex buffer

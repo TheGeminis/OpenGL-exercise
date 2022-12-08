@@ -14,7 +14,7 @@ ModuleTexture::~ModuleTexture()
 
 bool ModuleTexture::Init()
 {
-
+	LoadTexture();
 	return true;
 }
 
