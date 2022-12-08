@@ -13,7 +13,7 @@ ModuleCamera::~ModuleCamera()
 
 bool ModuleCamera::Init()
 {
-	horizon_fov = 150.0f;
+	horizon_fov = 90.0f;
 	camera_speed = 1.0f;
 
 	LOG("Setting Frustum Type to PerspectiveFrustum");
